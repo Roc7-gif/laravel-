@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: laravel-app
+    env: docker
+    plan: free
+    buildCommand: |
+      apt-get update && apt-get install -y php-cli php-mbstring php-xml php-bcmath php-curl unzip curl &&
+      curl -sS https://getcomposer.org/installer | php &&
+      php composer.phar install --optimize-autoloader --no-dev &&
+      php artisan key:generate &&
+      php artisan migrate --force
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
