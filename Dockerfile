@@ -35,7 +35,8 @@ RUN php artisan key:generate
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exposer le port attendu par Render
-EXPOSE 10000  # Render détecte automatiquement le PORT
+EXPOSE 10000  
+# Render détecte automatiquement le PORT
 
 # Lancer Laravel en utilisant le port dynamique fourni par Render
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
