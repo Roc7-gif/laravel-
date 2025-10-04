@@ -3,10 +3,40 @@ services:
     name: laravel-app
     env: docker
     plan: free
-    buildCommand: |
-      apt-get update && apt-get install -y php-cli php-mbstring php-xml php-bcmath php-curl unzip curl &&
-      curl -sS https://getcomposer.org/installer | php &&
-      php composer.phar install --optimize-autoloader --no-dev &&
-      php artisan key:generate &&
-      php artisan migrate --force
-    startCommand: ./start.sh
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://laravel.onrender.com
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: laravel-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: laravel-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: laravel-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: laravel-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: laravel-db
+          property: password
+
+databases:
+  - name: laravel-db
+    plan: free
