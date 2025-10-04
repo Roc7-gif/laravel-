@@ -32,7 +32,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
 
 # Donner les droits aux dossiers storage et bootstrap
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Exposer le port attendu par Render
 EXPOSE 10000  
