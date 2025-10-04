@@ -24,11 +24,18 @@ COPY . .
 # Installer les dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader
 
+# Copier le fichier .env si tu ne veux pas le gérer via Render
+# COPY .env .env
+# Sinon, configure les variables via l’onglet Environment de Render
+
+# Générer la clé Laravel
+RUN php artisan key:generate
+
 # Donner les droits aux dossiers storage et bootstrap
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Exposer le port
-EXPOSE 8000
+# Exposer le port attendu par Render
+EXPOSE 10000  # Render détecte automatiquement le PORT
 
-# Lancer Laravel avec artisan
-CMD php artisan serve --host=0.0.0.0 --port=8000
+# Lancer Laravel en utilisant le port dynamique fourni par Render
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
